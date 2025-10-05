@@ -1,5 +1,9 @@
 
 import React, { useEffect, useState } from "react";
+import Dashboard from "./components/Dashboard";
+import Settings from "./components/Settings";
+import ForecastChart from "./components/ForecastChart";
+import Trends from "./components/Trends";
 
 function App() {
 
@@ -50,54 +54,10 @@ function App() {
         AeroSense – NASA TEMPO Air Quality Forecast System
       </header>
       <main className="p-4">
-        <h2 className="text-xl font-semibold mb-2">Dashboard</h2>
-        {alert && (
-          <div className="bg-red-100 text-red-800 p-2 mb-4 rounded shadow">
-            {alert}
-          </div>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-white rounded shadow p-4">Current AQI: <span className="font-bold">{aqi ?? '--'}</span></div>
-          <div className="bg-white rounded shadow p-4">
-            Pollutants:
-            <span className="font-bold">
-              {pollutants.NO2 !== undefined ? `NO₂: ${pollutants.NO2}, ` : ''}
-              {pollutants["PM2.5"] !== undefined ? `PM2.5: ${pollutants["PM2.5"]}, ` : ''}
-              {pollutants.O3 !== undefined ? `O₃: ${pollutants.O3}` : ''}
-            </span>
-          </div>
-          <div className="bg-white rounded shadow p-4">
-            Weather:
-            <span className="font-bold">
-              {weather.temperature !== undefined ? `Temp: ${weather.temperature}°C, ` : ''}
-              {weather.humidity !== undefined ? `Humidity: ${weather.humidity}%, ` : ''}
-              {weather.wind !== undefined ? `Wind: ${weather.wind} m/s, ` : ''}
-              {weather.rain !== undefined ? `Rain: ${weather.rain} mm` : ''}
-            </span>
-          </div>
-        </div>
-        <h2 className="text-xl font-semibold mb-2">User Settings</h2>
-        <form className="bg-white rounded shadow p-4 mb-6" onSubmit={handleSettingsSubmit}>
-          <label className="block mb-2">Email for alerts:
-            <input type="email" name="email" value={settings.email} onChange={handleSettingsChange} className="border p-1 ml-2" />
-          </label>
-          <label className="block mb-2">Push token:
-            <input type="text" name="push_token" value={settings.push_token} onChange={handleSettingsChange} className="border p-1 ml-2" />
-          </label>
-          <button type="submit" className="bg-blue-700 text-white px-4 py-2 rounded">Save Settings</button>
-        </form>
-        <h2 className="text-xl font-semibold mb-2">Map & Forecast</h2>
-        <div className="bg-white rounded shadow p-4 mb-6">
-          {/* TODO: Integrate Leaflet map and Chart.js/Plotly.js for forecast */}
-          <div>Forecast (next 24h):</div>
-          <ul>
-            {forecast.map((f, i) => (
-              <li key={i}>Hour {f.hour}: AQI {f.aqi}</li>
-            ))}
-          </ul>
-        </div>
-        <h2 className="text-xl font-semibold mb-2">Historical Trends</h2>
-        <div className="bg-white rounded shadow p-4">[Historical Trends Placeholder]</div>
+        <Dashboard aqi={aqi} pollutants={pollutants} weather={weather} alert={alert} />
+        <Settings settings={settings} onChange={handleSettingsChange} onSubmit={handleSettingsSubmit} />
+        <ForecastChart forecast={forecast} />
+        <Trends />
       </main>
       <footer className="bg-blue-900 text-white p-2 text-center text-sm mt-8">
         Data sources: NASA TEMPO, OpenAQ, OpenWeatherMap
